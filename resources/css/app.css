@@ -29,10 +29,132 @@
 }
 
 @layer theme {
-    .dark {
+    /*
+     * Color themes, selectable from Settings > Theme. "violet" is the default —
+     * cooler than the plain neutral look the starter kit ships with.
+     *
+     * --theme-tint drives a subtle hue shift across the neutral zinc/gray
+     * scale so the whole app (sidebar, header, cards, borders, auth pages) —
+     * not just buttons — reflects the selected theme.
+     */
+    [data-theme='violet'] {
+        --theme-tint: var(--color-violet-500);
+    }
+
+    [data-theme='emerald'] {
+        --theme-tint: var(--color-emerald-500);
+    }
+
+    [data-theme='rose'] {
+        --theme-tint: var(--color-rose-500);
+    }
+
+    [data-theme='amber'] {
+        --theme-tint: var(--color-amber-500);
+    }
+
+    [data-theme='slate'] {
+        --theme-tint: #737373;
+    }
+
+    :root {
+        --color-zinc-50: color-mix(in oklch, var(--theme-tint) 5%, #fafafa);
+        --color-zinc-100: color-mix(in oklch, var(--theme-tint) 6%, #f5f5f5);
+        --color-zinc-200: color-mix(in oklch, var(--theme-tint) 8%, #e5e5e5);
+        --color-zinc-700: color-mix(in oklch, var(--theme-tint) 14%, #404040);
+        --color-zinc-800: color-mix(in oklch, var(--theme-tint) 14%, #262626);
+        --color-zinc-900: color-mix(in oklch, var(--theme-tint) 16%, #171717);
+        --color-zinc-950: color-mix(in oklch, var(--theme-tint) 18%, #0a0a0a);
+
+        --color-neutral-50: color-mix(in oklch, var(--theme-tint) 5%, #fafafa);
+        --color-neutral-100: color-mix(in oklch, var(--theme-tint) 6%, #f5f5f5);
+        --color-neutral-200: color-mix(in oklch, var(--theme-tint) 8%, #e5e5e5);
+        --color-neutral-700: color-mix(in oklch, var(--theme-tint) 14%, #404040);
+        --color-neutral-800: color-mix(in oklch, var(--theme-tint) 14%, #262626);
+        --color-neutral-900: color-mix(in oklch, var(--theme-tint) 16%, #171717);
+        --color-neutral-950: color-mix(in oklch, var(--theme-tint) 18%, #0a0a0a);
+    }
+
+    :root,
+    [data-theme='violet'] {
+        --color-accent: var(--color-violet-600);
+        --color-accent-content: var(--color-violet-600);
+        --color-accent-foreground: var(--color-white);
+        --theme-surface-from: var(--color-violet-50);
+        --theme-surface-to: var(--color-white);
+    }
+
+    .dark,
+    .dark[data-theme='violet'] {
+        --color-accent: var(--color-violet-400);
+        --color-accent-content: var(--color-violet-400);
+        --color-accent-foreground: var(--color-violet-950);
+        --theme-surface-from: var(--color-violet-950);
+        --theme-surface-to: var(--color-zinc-900);
+    }
+
+    [data-theme='emerald'] {
+        --color-accent: var(--color-emerald-600);
+        --color-accent-content: var(--color-emerald-600);
+        --color-accent-foreground: var(--color-white);
+        --theme-surface-from: var(--color-emerald-50);
+        --theme-surface-to: var(--color-white);
+    }
+
+    .dark[data-theme='emerald'] {
+        --color-accent: var(--color-emerald-400);
+        --color-accent-content: var(--color-emerald-400);
+        --color-accent-foreground: var(--color-emerald-950);
+        --theme-surface-from: var(--color-emerald-950);
+        --theme-surface-to: var(--color-zinc-900);
+    }
+
+    [data-theme='rose'] {
+        --color-accent: var(--color-rose-600);
+        --color-accent-content: var(--color-rose-600);
+        --color-accent-foreground: var(--color-white);
+        --theme-surface-from: var(--color-rose-50);
+        --theme-surface-to: var(--color-white);
+    }
+
+    .dark[data-theme='rose'] {
+        --color-accent: var(--color-rose-400);
+        --color-accent-content: var(--color-rose-400);
+        --color-accent-foreground: var(--color-rose-950);
+        --theme-surface-from: var(--color-rose-950);
+        --theme-surface-to: var(--color-zinc-900);
+    }
+
+    [data-theme='amber'] {
+        --color-accent: var(--color-amber-600);
+        --color-accent-content: var(--color-amber-600);
+        --color-accent-foreground: var(--color-white);
+        --theme-surface-from: var(--color-amber-50);
+        --theme-surface-to: var(--color-white);
+    }
+
+    .dark[data-theme='amber'] {
+        --color-accent: var(--color-amber-400);
+        --color-accent-content: var(--color-amber-400);
+        --color-accent-foreground: var(--color-amber-950);
+        --theme-surface-from: var(--color-amber-950);
+        --theme-surface-to: var(--color-zinc-900);
+    }
+
+    [data-theme='slate'] {
+        --color-accent: var(--color-neutral-800);
+        --color-accent-content: var(--color-neutral-800);
+        --color-accent-foreground: var(--color-white);
+        --theme-surface-from: var(--color-zinc-50);
+        --theme-surface-to: var(--color-white);
+    }
+
+    .dark[data-theme='slate'] {
         --color-accent: var(--color-white);
         --color-accent-content: var(--color-white);
         --color-accent-foreground: var(--color-neutral-800);
+        --theme-surface-from: var(--color-zinc-900);
+        --theme-surface-to: var(--color-zinc-800);
     }
 }
 
