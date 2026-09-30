@@ -355,9 +355,11 @@ new #[Title('Play Table')] class extends Component {
                         </flux:text>
                     </div>
                     <!-- A button to toggle $showPresets, which shows/hides the preset token grid. -->
-                    <flux:button wire:click="toggleShowPresets" size="sm" variant="ghost"
-                        class="max-w-1/2 bg-emerald-800 dark:bg-emerald-600 dark:text-emerald-800 justify-self-center sm:justify-self-end">
-                        {{ __('Show/Hide Presets') }}
+                    <flux:button
+                        wire:click="toggleShowPresets" size="sm"
+                        :variant="$this->showPresets ? 'filled' : 'ghost'"
+                        class="max-w-1/2 justify-self-center sm:justify-self-end border">
+                        {{ $this->showPresets ? __('Hide Presets') : __('Show Presets') }}
                     </flux:button>
                 </div>
                 <div wire:show="showPresets" x-transition.duration.300ms class="border border-zinc-300 dark:border-zinc-600 rounded-lg">
@@ -369,9 +371,12 @@ new #[Title('Play Table')] class extends Component {
                     <div
                         class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 max-h-100 overflow-y-auto overflow-x-scroll scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent dark:scrollbar-thumb-zinc-700">
                         @foreach ($this->presets() as $preset)
-                            <flux:button class="border border-zinc-300 shadow" size="sm" icon="plus"
+                            <flux:button
+                                class="border border-zinc-300 shadow"
+                                icon="plus"
+                                size="sm"
                                 wire:click="addPreset({{ $preset->id }})">
-                                {{ $preset->name }} ({{ $preset->power }}/{{ $preset->toughness }})
+                                    {{ $preset->name }} ({{ $preset->power }}/{{ $preset->toughness }})
                             </flux:button>
                         @endforeach
                     </div>
@@ -403,12 +408,15 @@ new #[Title('Play Table')] class extends Component {
                     <flux:textarea class="mb-4" wire:model="description" :label="__('Description')" size="sm"
                         input:class="text-center" />
                     <div class="grid grid-cols-2 gap-3">
-                        <flux:button type="submit" size="sm" icon="plus-circle"
+                        <flux:button
+                            variant="primary"
+                            type="submit"
+                            size="sm" icon="plus"
                             data-test="add-custom-card-button">
                             {{ __('Add card') }}</flux:button>
-                        <flux:button type="reset" size="sm" variant="ghost" icon="x-mark"
+                        <flux:button type="reset" size="sm" variant="danger" icon="x-circle"
                             data-test="reset-custom-card-button">
-                            {{ __('Reset') }}</flux:button>
+                            {{ __('Clear') }}</flux:button>
                     </div>
                 </form>
             </div>

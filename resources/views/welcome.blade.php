@@ -5,12 +5,11 @@
     </head>
     <body class="flex min-h-screen flex-col items-center bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
         <header class="flex w-full max-w-4xl items-center justify-between p-6 lg:p-8">
-            <x-app-logo />
 
             @if (Route::has('login'))
                 <nav class="flex items-center gap-4 text-sm">
                     @auth
-                        <flux:button :href="route('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:button>
+                        <flux:button :href="route('pages.dashboard.index')" wire:navigate>{{ __('Dashboard') }}</flux:button>
                     @else
                         <flux:button variant="ghost" :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:button>
 

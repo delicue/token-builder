@@ -15,12 +15,12 @@
                     <flux:sidebar.item icon="home" :href="route('pages.dashboard.index')" :current="request()->routeIs('pages.dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    {{-- <flux:sidebar.item icon="heart" :href="route('pages.dashboard.life-counter')" :current="request()->routeIs('pages.dashboard.life-counter')" wire:navigate>
-                        {{ __('Life Counter') }}
-                    </flux:sidebar.item> --}}
-                    <flux:sidebar.item icon="document-plus" :href="route('pages.dashboard.token-presets')" :current="request()->routeIs('pages.dashboard.token-presets')" wire:navigate>
-                        {{ __('Token Presets') }}
+                    <flux:sidebar.item icon="plus" :href="route('pages.dashboard.counters')" :current="request()->routeIs('pages.dashboard.counters')" wire:navigate>
+                        {{ __('Counters') }}
                     </flux:sidebar.item>
+                    {{-- <flux:sidebar.item icon="document-plus" :href="route('pages.dashboard.token-presets')" :current="request()->routeIs('pages.dashboard.token-presets')" wire:navigate>
+                        {{ __('Token Presets') }}
+                    </flux:sidebar.item> --}}
                     <flux:sidebar.item icon="play" :href="route('pages.dashboard.play-table')" :current="request()->routeIs('pages.dashboard.play-table')" wire:navigate>
                         {{ __('Play Table') }}
                     </flux:sidebar.item>
