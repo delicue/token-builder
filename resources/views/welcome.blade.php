@@ -1,54 +1,78 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark" data-theme="{{ auth()->user()?->theme ?? 'violet' }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="flex min-h-screen flex-col items-center bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
-        <header class="flex w-full max-w-4xl items-center justify-between p-6 lg:p-8">
+    <body class="welcome-page">
+        <div class="welcome-atmosphere" aria-hidden="true">
+            <span class="welcome-atmosphere__glow"></span>
+            <span class="welcome-atmosphere__orbit"></span>
+            <span class="welcome-atmosphere__shape welcome-atmosphere__shape--orb"></span>
+            <span class="welcome-atmosphere__shape welcome-atmosphere__shape--diamond"></span>
+            <span class="welcome-atmosphere__shape welcome-atmosphere__shape--die"></span>
+            <span class="welcome-atmosphere__shape welcome-atmosphere__shape--ring"></span>
+        </div>
 
+        <header class="welcome-header">
+            <a class="welcome-brand" href="{{ route('home') }}" wire:navigate>
+                <span class="welcome-brand__mark" aria-hidden="true">T</span>
+                <span>{{ config('app.name', 'Token Builder') }}</span>
+            </a>
             @if (Route::has('login'))
-                <nav class="flex items-center gap-4 text-sm">
+                <nav class="welcome-nav" aria-label="{{ __('Account') }}">
                     @auth
-                        <flux:button :href="route('pages.dashboard.index')" wire:navigate>{{ __('Dashboard') }}</flux:button>
+                        <a class="welcome-nav__link" href="{{ route('pages.dashboard.index') }}" wire:navigate>{{ __('Dashboard') }}</a>
                     @else
-                        <flux:button variant="ghost" :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:button>
+                        <a class="welcome-nav__link" href="{{ route('login') }}" wire:navigate>{{ __('Log in') }}</a>
 
                         @if (Route::has('register'))
-                            <flux:button :href="route('register')" wire:navigate>{{ __('Register') }}</flux:button>
+                            <a class="welcome-nav__button" href="{{ route('register') }}" wire:navigate>{{ __('Get started') }}</a>
                         @endif
                     @endauth
                 </nav>
             @endif
         </header>
 
-        <main class="flex w-full max-w-4xl flex-1 flex-col items-center justify-center gap-10 px-6 pb-16 text-center">
-
-            <div class="flex flex-col items-center gap-3">
-                <flux:heading size="xl">{{ config('app.name', 'Token Builder') }}</flux:heading>
-                <flux:text class="max-w-md">
-                    {{ __('Create custom tokens with your own labels, roll dice, and create counters — all in one clean workspace.') }}
-                </flux:text>
-            </div>
-
-            <div class="flex items-center gap-8">
-                <div class="flex size-20 items-center justify-center rounded-full border-2 border-zinc-300 bg-zinc-50 text-sm font-semibold dark:border-zinc-600 dark:bg-zinc-900">
-                    {{ __('Hero') }}
+        <main class="welcome-main">
+            <section class="welcome-hero" aria-labelledby="welcome-title">
+                <div class="welcome-copy">
+                    <p class="welcome-eyebrow"><span></span>{{ __('A little more magic at the table') }}</p>
+                    <h1 id="welcome-title">{{ __('Make your table a little more yours.') }}</h1>
+                    <p class="welcome-description">
+                        {{ __('Create custom tokens with your own labels, roll dice, and keep counters close at hand. Everything you need for a more personal game night.') }}
+                    </p>
+                    <div class="welcome-actions">
+                        @auth
+                            <a class="welcome-primary" href="{{ route('pages.dashboard.index') }}" wire:navigate>{{ __('Open your workspace') }}<span class="welcome-primary__arrow" aria-hidden="true"></span></a>
+                        @else
+                            @if (Route::has('register'))
+                                <a class="welcome-primary" href="{{ route('register') }}" wire:navigate>{{ __('Build your first set') }}<span class="welcome-primary__arrow" aria-hidden="true"></span></a>
+                            @endif
+                            @if (Route::has('login'))
+                                <a class="welcome-secondary" href="{{ route('login') }}" wire:navigate>{{ __('I already have an account') }}</a>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
-                <div class="flex size-20 items-center justify-center rounded-md border-2 border-zinc-300 bg-zinc-50 text-sm font-semibold dark:border-zinc-600 dark:bg-zinc-900">
-                    {{ __('Ally') }}
-                </div>
-                <div class="grid size-16 grid-cols-3 grid-rows-3 place-items-center rounded-lg border-2 border-zinc-300 bg-zinc-50 p-2 dark:border-zinc-600 dark:bg-zinc-900">
-                    <span class="col-start-1 row-start-1 size-2 rounded-full bg-current"></span>
-                    <span class="col-start-3 row-start-1 size-2 rounded-full bg-current"></span>
-                    <span class="col-start-2 row-start-2 size-2 rounded-full bg-current"></span>
-                    <span class="col-start-1 row-start-3 size-2 rounded-full bg-current"></span>
-                    <span class="col-start-3 row-start-3 size-2 rounded-full bg-current"></span>
-                </div>
-            </div>
 
-            @if (! auth()->check() && Route::has('register'))
-                <flux:button :href="route('register')" wire:navigate>{{ __('Get started') }}</flux:button>
-            @endif
+                <div class="welcome-stage" role="img" aria-label="{{ __('A preview of custom Hero and Ally tokens alongside a die') }}">
+                    <span class="welcome-stage__halo"></span>
+                    <span class="welcome-stage__spark welcome-stage__spark--one"></span>
+                    <span class="welcome-stage__spark welcome-stage__spark--two"></span>
+                    <div class="welcome-token welcome-token--hero"><span>01</span><strong>{{ __('Hero') }}</strong></div>
+                    <div class="welcome-token welcome-token--ally"><span>02</span><strong>{{ __('Ally') }}</strong></div>
+                    <div class="welcome-die" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <span class="welcome-stage__orbit"></span>
+                </div>
+            </section>
+
+            <section class="welcome-tools" aria-label="{{ __('Workspace tools') }}">
+                <div><span class="welcome-tools__number">01</span><span>{{ __('Custom tokens') }}</span></div>
+                <div><span class="welcome-tools__number">02</span><span>{{ __('Quick dice rolls') }}</span></div>
+                <div><span class="welcome-tools__number">03</span><span>{{ __('Table counters') }}</span></div>
+            </section>
         </main>
     </body>
 </html>
