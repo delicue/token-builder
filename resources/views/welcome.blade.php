@@ -26,7 +26,7 @@
             <div class="flex flex-col items-center gap-3">
                 <flux:heading size="xl">{{ config('app.name', 'Token Builder') }}</flux:heading>
                 <flux:text class="max-w-md">
-                    {{ __('Design custom shape tokens with your own labels, and roll dice — all in one clean workspace.') }}
+                    {{ __('Create custom tokens with your own labels, roll dice, and create counters — all in one clean workspace.') }}
                 </flux:text>
             </div>
 
