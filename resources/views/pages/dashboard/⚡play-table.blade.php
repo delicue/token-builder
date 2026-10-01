@@ -423,10 +423,13 @@ new #[Title('Play Table')] class extends Component {
 
             <!-- Cards in play -->
             <div
-                class="grid min-h-40 grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4 rounded-xl border border-dashed border-zinc-300 p-4 dark:border-zinc-700">
+                class="play-table-board relative isolate grid min-h-40 grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4 rounded-xl border border-dashed border-zinc-300 p-4 dark:border-zinc-700">
+                <span class="play-table-prop play-table-prop--poly-die" aria-hidden="true"></span>
+                <span class="play-table-prop play-table-prop--pip-die" aria-hidden="true"></span>
+                <span class="play-table-prop play-table-prop--counter" aria-hidden="true"></span>
                 @forelse ($cards as $card)
                     <div wire:key="{{ $card['id'] }}" data-test="card-{{ $card['id'] }}"
-                        class="flex flex-col gap-3 rounded-xl border bg-white p-4 shadow-sm transition-all duration-300 ease-out hover:shadow-md dark:bg-zinc-900 {{ $card['tapped'] ? 'rotate-90 border-amber-300 dark:border-amber-700' : 'border-zinc-200 dark:border-zinc-700' }}">
+                        class="relative z-10 flex flex-col gap-3 rounded-xl border bg-white p-4 shadow-sm transition-all duration-300 ease-out hover:shadow-md dark:bg-zinc-900 {{ $card['tapped'] ? 'rotate-90 border-amber-300 dark:border-amber-700' : 'border-zinc-200 dark:border-zinc-700' }}">
                         <div class="flex items-start justify-between gap-2">
                             <div class="min-w-0">
                                 <flux:heading size="sm" class="truncate">{{ $card['name'] }}</flux:heading>

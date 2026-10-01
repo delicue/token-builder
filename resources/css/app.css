@@ -183,6 +183,127 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
+.app-atmosphere {
+    --app-atmosphere-surface: var(--color-white);
+    --app-atmosphere-glow: 7%;
+    --app-atmosphere-glow-secondary: 4%;
+    position: relative;
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at 82% 8%, color-mix(in oklch, var(--theme-tint) var(--app-atmosphere-glow), transparent), transparent 38%),
+        radial-gradient(ellipse at 8% 88%, color-mix(in oklch, var(--theme-tint) var(--app-atmosphere-glow-secondary), transparent), transparent 34%),
+        var(--app-atmosphere-surface);
+}
+
+html.dark .app-atmosphere {
+    --app-atmosphere-surface: var(--color-zinc-900);
+    --app-atmosphere-glow: 12%;
+    --app-atmosphere-glow-secondary: 8%;
+}
+
+.app-atmosphere::before,
+.app-atmosphere::after {
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    content: '';
+}
+
+.app-atmosphere::before {
+    inset: -22%;
+    background:
+        radial-gradient(ellipse at 74% 26%, color-mix(in oklch, var(--theme-tint) 11%, transparent), transparent 34%),
+        radial-gradient(ellipse at 23% 72%, color-mix(in oklch, var(--theme-tint) 7%, transparent), transparent 30%);
+    animation: app-atmosphere-drift 28s ease-in-out infinite alternate;
+}
+
+.app-atmosphere::after {
+    top: 16%;
+    right: 9%;
+    width: clamp(72px, 10vw, 132px);
+    aspect-ratio: 1;
+    border: 1px solid color-mix(in oklch, var(--theme-tint) 25%, transparent);
+    border-radius: 50%;
+    box-shadow: 0 0 46px color-mix(in oklch, var(--theme-tint) 12%, transparent);
+    animation: app-atmosphere-float 19s ease-in-out infinite;
+}
+
+.play-table-board {
+    background:
+        radial-gradient(ellipse at 50% 48%, color-mix(in oklch, var(--theme-tint) 6%, transparent), transparent 70%);
+}
+
+.play-table-prop {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    border: 1px solid color-mix(in oklch, var(--theme-tint) 34%, transparent);
+    background-color: color-mix(in oklch, var(--theme-tint) 10%, transparent);
+    box-shadow: 0 0 32px color-mix(in oklch, var(--theme-tint) 12%, transparent);
+    pointer-events: none;
+}
+
+.play-table-prop--poly-die {
+    top: 22%;
+    left: 8%;
+    width: 46px;
+    aspect-ratio: 1;
+    clip-path: polygon(50% 0, 88% 12%, 100% 50%, 88% 88%, 50% 100%, 12% 88%, 0 50%, 12% 12%);
+    animation: play-table-prop-float 11s ease-in-out infinite;
+}
+
+.play-table-prop--pip-die {
+    top: 54%;
+    right: 7%;
+    width: 38px;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    background-color: color-mix(in oklch, var(--theme-tint) 18%, var(--color-zinc-900));
+    background-image:
+        radial-gradient(circle at 27% 27%, color-mix(in oklch, var(--theme-tint) 68%, white) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 73% 27%, color-mix(in oklch, var(--theme-tint) 68%, white) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 50% 50%, color-mix(in oklch, var(--theme-tint) 68%, white) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 27% 73%, color-mix(in oklch, var(--theme-tint) 68%, white) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 73% 73%, color-mix(in oklch, var(--theme-tint) 68%, white) 0 2px, transparent 2.5px);
+    animation: play-table-prop-float 13s 500ms ease-in-out infinite reverse;
+}
+
+.play-table-prop--counter {
+    bottom: 8%;
+    left: 42%;
+    width: 62px;
+    height: 34px;
+    border-radius: 999px;
+    animation: play-table-prop-float 15s ease-in-out infinite;
+}
+
+.play-table-prop--counter::after {
+    position: absolute;
+    inset: 8px 22px;
+    border: 1px solid color-mix(in oklch, var(--theme-tint) 54%, transparent);
+    border-radius: 50%;
+    content: '';
+}
+
+.app-atmosphere .rounded-2xl {
+    border-radius: 8px;
+}
+
+@keyframes app-atmosphere-drift {
+    from { translate: 2% -1%; scale: 1; }
+    to { translate: -3% 3%; scale: 1.06; }
+}
+
+@keyframes app-atmosphere-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -16px; }
+}
+
+@keyframes play-table-prop-float {
+    0%, 100% { translate: 0 0; rotate: -10deg; }
+    50% { translate: 0 -12px; rotate: 5deg; }
+}
+
 .welcome-page {
     --welcome-theme: var(--theme-tint, #8b5cf6);
     position: relative;
@@ -788,6 +909,17 @@ select:focus[data-flux-control] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .app-atmosphere::before,
+    .app-atmosphere::after {
+        animation: none !important;
+    }
+
+    .play-table-prop {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
     .welcome-page *,
     .welcome-page *::before,
     .welcome-page *::after {
