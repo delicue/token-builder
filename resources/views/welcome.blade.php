@@ -46,7 +46,7 @@
                             <a class="welcome-primary" href="{{ route('pages.dashboard.index') }}" wire:navigate>{{ __('Open your workspace') }}<span class="welcome-primary__arrow" aria-hidden="true"></span></a>
                         @else
                             @if (Route::has('register'))
-                                <a class="welcome-primary" href="{{ route('register') }}" wire:navigate>{{ __('Build your first set') }}<span class="welcome-primary__arrow" aria-hidden="true"></span></a>
+                                <a class="welcome-primary" href="{{ route('register') }}" wire:navigate>{{ __('Build your first set') }}<flux:icon name="arrow-right" aria-hidden="true" /></a>
                             @endif
                             @if (Route::has('login'))
                                 <a class="welcome-secondary" href="{{ route('login') }}" wire:navigate>{{ __('I already have an account') }}</a>
