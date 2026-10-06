@@ -13,8 +13,9 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property Carbon $played_on
  * @property array<int, array<string, mixed>> $cards
+ * @property array<int, int>|null $counters
  */
-#[Fillable(['user_id', 'name', 'played_on', 'cards'])]
+#[Fillable(['user_id', 'name', 'played_on', 'cards', 'counters'])]
 class TokenSession extends Model
 {
     /**
@@ -27,6 +28,7 @@ class TokenSession extends Model
         return [
             'played_on' => 'date',
             'cards' => 'array',
+            'counters' => 'array',
         ];
     }
 

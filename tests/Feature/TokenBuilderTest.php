@@ -1,19 +1,20 @@
 <?php
 
+use App\Livewire\Dashboard\SessionsFooter;
 use App\Models\TokenPreset;
 use App\Models\TokenSession;
 use App\Models\User;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    $this->soldier = TokenPreset::create(['name' => 'Soldier', 'type' => 'Creature — Soldier', 'power' => 1, 'toughness' => 1]);
-    $this->zombie = TokenPreset::create(['name' => 'Zombie', 'type' => 'Creature — Zombie', 'power' => 2, 'toughness' => 2]);
+    $this->soldier = TokenPreset::create(['name' => 'Soldier', 'type' => 'Creature — Soldier', 'power' => 1, 'toughness' => 1, 'colors' => []]);
+    $this->zombie = TokenPreset::create(['name' => 'Zombie', 'type' => 'Creature — Zombie', 'power' => 2, 'toughness' => 2, 'colors' => []]);
 });
 
 test('preset tokens can be added to the canvas', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id);
 
     expect($component->get('cards'))->toHaveCount(1);
@@ -31,9 +32,10 @@ test('preset tokens can be added to the canvas', function () {
 test('a custom card can be added from the form', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->set('name', 'Dragon')
         ->set('type', 'Creature — Dragon')
+        ->set('colors', ['red'])
         ->set('power', 5)
         ->set('toughness', 5)
         ->call('addCustom');
@@ -51,7 +53,7 @@ test('a custom card can be added from the form', function () {
 test('a custom card requires its fields', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::play-table')
+    Livewire::test('pages::dashboard.play-table')
         ->set('name', '')
         ->call('addCustom')
         ->assertHasErrors(['name']);
@@ -60,7 +62,7 @@ test('a custom card requires its fields', function () {
 test('a card can be tapped and untapped', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id);
 
     $id = $component->get('cards')[0]['id'];
@@ -75,7 +77,7 @@ test('a card can be tapped and untapped', function () {
 test('linked counters adjust both power and toughness together', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id);
 
     $id = $component->get('cards')[0]['id'];
@@ -94,7 +96,7 @@ test('linked counters adjust both power and toughness together', function () {
 test('counters can be unlinked to adjust power and toughness independently', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id);
 
     $id = $component->get('cards')[0]['id'];
@@ -113,7 +115,7 @@ test('counters can be unlinked to adjust power and toughness independently', fun
 test('relinking counters syncs toughness counters to power counters', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id);
 
     $id = $component->get('cards')[0]['id'];
@@ -133,7 +135,7 @@ test('relinking counters syncs toughness counters to power counters', function (
 test('a card can be removed from play', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id)
         ->call('addPreset', $this->zombie->id);
 
@@ -148,7 +150,7 @@ test('a card can be removed from play', function () {
 test('rolling dice fills the results with values within range', function () {
     $this->actingAs(User::factory()->create());
 
-    $component = Livewire::test('pages::play-table')
+    $component = Livewire::test('pages::dashboard.play-table')
         ->set('dieSides', 20)
         ->set('dieCount', 3)
         ->call('rollDice');
@@ -167,7 +169,7 @@ test('rolling dice fills the results with values within range', function () {
 test('rolling dice requires a valid count', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::play-table')
+    Livewire::test('pages::dashboard.play-table')
         ->set('dieCount', 0)
         ->call('rollDice')
         ->assertHasErrors(['dieCount']);
@@ -177,12 +179,17 @@ test('a session can be saved with the suggested name and today\'s date', functio
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $component = Livewire::test('pages::play-table')
+    $cards = Livewire::test('pages::dashboard.play-table')
         ->call('addPreset', $this->soldier->id);
+
+    $component = Livewire::test(SessionsFooter::class);
 
     expect($component->get('sessionName'))->toBe('Session 1');
 
-    $component->call('saveSession');
+    $component->call('saveSession', [
+        'pages::dashboard.play-table' => ['cards' => $cards->get('cards')],
+        'pages::dashboard.counters' => ['counters' => []],
+    ]);
 
     expect(TokenSession::where('user_id', $user->id)->count())->toBe(1);
 
@@ -203,7 +210,7 @@ test('the suggested session name increments with each saved session', function (
         'cards' => [],
     ]);
 
-    $component = Livewire::test('pages::play-table');
+    $component = Livewire::test(SessionsFooter::class);
 
     expect($component->get('sessionName'))->toBe('Session 2');
 });
@@ -219,11 +226,11 @@ test('a saved session can be loaded back onto the canvas', function () {
         'cards' => [['id' => 'abc', 'name' => 'Zombie', 'type' => 'Creature — Zombie', 'power' => 2, 'toughness' => 2, 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false]],
     ]);
 
-    $component = Livewire::test('pages::play-table')
-        ->call('loadSession', $session->id);
+    $component = Livewire::test(SessionsFooter::class)
+        ->call('loadSession', $session->id)
+        ->assertDispatched('dashboard-session-loaded', cards: $session->cards, counters: []);
 
-    expect($component->get('cards'))->toHaveCount(1);
-    expect($component->get('cards')[0]['name'])->toBe('Zombie');
+    expect($component->get('expanded'))->toBeFalse();
 });
 
 test('a saved session can be deleted', function () {
@@ -237,7 +244,7 @@ test('a saved session can be deleted', function () {
         'cards' => [],
     ]);
 
-    Livewire::test('pages::play-table')
+    Livewire::test(SessionsFooter::class)
         ->call('deleteSession', $session->id);
 
     expect(TokenSession::where('user_id', $user->id)->count())->toBe(0);
@@ -256,10 +263,10 @@ test('a user cannot load or delete another user\'s session', function () {
 
     $this->actingAs($intruder);
 
-    expect(fn () => Livewire::test('pages::play-table')->call('loadSession', $session->id))
+    expect(fn () => Livewire::test(SessionsFooter::class)->call('loadSession', $session->id))
         ->toThrow(Illuminate\Database\Eloquent\ModelNotFoundException::class);
 
-    Livewire::test('pages::play-table')->call('deleteSession', $session->id);
+    Livewire::test(SessionsFooter::class)->call('deleteSession', $session->id);
 
     expect(TokenSession::find($session->id))->not->toBeNull();
 });

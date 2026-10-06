@@ -1,10 +1,17 @@
 <?php
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 new class extends Component {
     public int $counterLimit = 64;
     public array $counters = [];
+
+    #[On('dashboard-session-loaded')]
+    public function restoreSession(array $cards, array $counters): void
+    {
+        $this->counters = $counters;
+    }
 
     public function addCounter()
     {
@@ -21,6 +28,11 @@ new class extends Component {
     public function decrement($index)
     {
         $this->counters[$index]--;
+    }
+
+    public function deleteCounter($index)
+    {
+        array_splice($this->counters, $index, 1);
     }
 };
 ?>
@@ -46,7 +58,7 @@ new class extends Component {
                 <!-- Reset button -->
                 <flux:button size="sm" variant="ghost" class="w-auto mx-auto" wire:click="$set('counters.{{ $i }}', 0)">{{ __('Reset') }}</flux:button>
                 <!-- Delete button -->
-                <flux:button size="sm" variant="danger" class="w-auto mx-auto" wire:click="$unset('counters.{{ $i }}')">{{ __('Delete') }}</flux:button>
+                <flux:button size="sm" variant="danger" class="w-auto mx-auto" wire:click="$wire.deleteCounter({{ $i }})">{{ __('Delete') }}</flux:button>
             </div>
         </div>
         <!-- End of counter block -->

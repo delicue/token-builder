@@ -1,9 +1,8 @@
 <?php
 
 use App\Models\TokenPreset;
-use App\Models\TokenSession;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -39,20 +38,7 @@ new #[Title('Play Table')] class extends Component {
     /** @var array<int, int> */
     public array $rolls = [];
 
-    public string $sessionName = '';
-
-    public string $sessionDate = '';
-
     public bool $showPresets = true;
-
-    /**
-     * Prepare the form with sensible defaults.
-     */
-    public function mount(): void
-    {
-        $this->sessionName = $this->suggestedSessionName();
-        $this->sessionDate = now()->toDateString();
-    }
 
     /**
      * The token presets available to add to the canvas.
@@ -60,22 +46,6 @@ new #[Title('Play Table')] class extends Component {
     public function presets()
     {
         return TokenPreset::orderBy('name')->get();
-    }
-
-    /**
-     * The current user's saved sessions, most recent first.
-     */
-    public function sessions()
-    {
-        return TokenSession::where('user_id', Auth::id())->latest()->get();
-    }
-
-    /**
-     * A default session name based on how many sessions have been saved.
-     */
-    public function suggestedSessionName(): string
-    {
-        return __('Session :number', ['number' => TokenSession::where('user_id', Auth::id())->count() + 1]);
     }
 
     /**
@@ -148,42 +118,10 @@ new #[Title('Play Table')] class extends Component {
             ->all();
     }
 
-    /**
-     * Save the current canvas as a named session.
-     */
-    public function saveSession(): void
+    #[On('dashboard-session-loaded')]
+    public function restoreSession(array $cards, array $counters): void
     {
-        $this->validate([
-            'sessionName' => 'required|string|max:255',
-            'sessionDate' => 'required|date',
-        ]);
-
-        TokenSession::create([
-            'user_id' => Auth::id(),
-            'name' => $this->sessionName,
-            'played_on' => $this->sessionDate,
-            'cards' => $this->cards,
-        ]);
-
-        $this->sessionName = $this->suggestedSessionName();
-    }
-
-    /**
-     * Load a saved session's cards onto the canvas.
-     */
-    public function loadSession(int $id): void
-    {
-        $session = TokenSession::where('user_id', Auth::id())->findOrFail($id);
-
-        $this->cards = $session->cards;
-    }
-
-    /**
-     * Delete a saved session.
-     */
-    public function deleteSession(int $id): void
-    {
-        TokenSession::where('user_id', Auth::id())->where('id', $id)->delete();
+        $this->cards = $cards;
     }
 
     /**
@@ -543,43 +481,6 @@ new #[Title('Play Table')] class extends Component {
                 @endif
             </div>
 
-            <div class="flex flex-col gap-4 rounded-xl">
-                <flux:heading size="lg">{{ __('Sessions') }}</flux:heading>
-
-                <form wire:submit="saveSession" class="flex flex-wrap items-end gap-3">
-                    <flux:input wire:model="sessionName" :label="__('Session name')" size="sm" />
-                    <flux:input wire:model="sessionDate" :label="__('Date')" type="date" size="sm" />
-                    <flux:button type="submit" size="sm" icon="bookmark" data-test="save-session-button">
-                        {{ __('Save session') }}</flux:button>
-                </form>
-
-                @if ($this->sessions()->isNotEmpty())
-                    <ul class="flex flex-col gap-2">
-                        @foreach ($this->sessions() as $session)
-                            <li class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-zinc-200 px-3 py-2 text-sm dark:border-zinc-700"
-                                data-test="session-{{ $session->id }}">
-                                <div>
-                                    <span class="font-medium">{{ $session->name }}</span>
-                                    <span class="text-zinc-500">—
-                                        {{ $session->played_on->format('M j, Y') }}</span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <flux:button size="xs" variant="ghost"
-                                        wire:click="loadSession({{ $session->id }})"
-                                        data-test="load-session-button">
-                                        {{ __('Load') }}
-                                    </flux:button>
-                                    <flux:button size="xs" variant="ghost" icon="trash"
-                                        wire:click="deleteSession({{ $session->id }})"
-                                        data-test="delete-session-button" :aria-label="__('Delete')" />
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <flux:text class="text-zinc-500">{{ __('No saved sessions yet.') }}</flux:text>
-                @endif
-            </div>
         </div>
     </div>
 </div>
