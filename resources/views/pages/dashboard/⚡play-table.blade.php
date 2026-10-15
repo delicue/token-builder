@@ -17,8 +17,8 @@ new #[Title('Play Table')] class extends Component {
     #[Validate('required|string|max:255')]
     public string $type = '';
 
-    #[Validate('required|array')]
-    public array $colors = [];
+    #[Validate('required|string|max:255')]
+    public string $colors = '';
 
     #[Validate('required|integer|min:0')]
     public int $power = 1;
@@ -231,7 +231,7 @@ new #[Title('Play Table')] class extends Component {
         $this->showPresets = !$this->showPresets;
     }
 
-    private function pushCard(string $name, string $type, int $power, int $toughness, ?string $description, array $colors): void
+    private function pushCard(string $name, string $type, int $power, int $toughness, ?string $description, string $colors): void
     {
         $this->cards[] = [
             'id' => (string) Str::uuid(),
@@ -422,11 +422,11 @@ new #[Title('Play Table')] class extends Component {
                                 {{ $card['tapped'] ? __('Untap') : __('Tap') }}
                             </flux:button>
 
-                            <flux:modal.trigger name="view-description">
+                            <flux:modal.trigger name="view-description-{{ $card['id'] }}">
                                 <flux:button>View Description</flux:button>
                             </flux:modal.trigger>
 
-                            <flux:modal name="view-description" class="md:w-96">
+                            <flux:modal name="view-description-{{ $card['id'] }}" class="md:w-96">
                                 <div class="space-y-6">
                                     <div>
                                         <flux:heading size="lg">View Description</flux:heading>

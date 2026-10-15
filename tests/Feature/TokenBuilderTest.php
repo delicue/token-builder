@@ -147,6 +147,22 @@ test('a card can be removed from play', function () {
     expect($component->get('cards')[0]['name'])->toBe('Zombie');
 });
 
+test('each card has its own description modal', function () {
+    $this->actingAs(User::factory()->create());
+
+    $component = Livewire::test('pages::dashboard.play-table')
+        ->set('cards', [
+            ['id' => 'first-card', 'name' => 'Soldier', 'type' => 'Creature', 'power' => 1, 'toughness' => 1, 'description' => 'First description', 'colors' => '', 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false],
+            ['id' => 'second-card', 'name' => 'Zombie', 'type' => 'Creature', 'power' => 2, 'toughness' => 2, 'description' => 'Second description', 'colors' => '', 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false],
+        ]);
+
+    $html = $component->html();
+
+    expect($html)
+        ->toContain('view-description-first-card')
+        ->toContain('view-description-second-card');
+});
+
 test('rolling dice fills the results with values within range', function () {
     $this->actingAs(User::factory()->create());
 
