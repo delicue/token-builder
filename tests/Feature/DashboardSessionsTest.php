@@ -87,6 +87,7 @@ test('the shared sessions footer is present on every dashboard page', function (
     ] as $url) {
         $this->get($url)
             ->assertOk()
+            ->assertSee('content="'.csrf_token().'"', false)
             ->assertSee('data-session-footer', false)
             ->assertSee(__('Sessions'));
     }
