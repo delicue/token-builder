@@ -15,6 +15,9 @@
             'solid' => '[:where(&)]:size-6',
             'mini' => '[:where(&)]:size-5',
             'micro' => '[:where(&)]:size-4',
+            'destructive' => '[:where(&)]:size-6',
+            'danger' => '[:where(&)]:size-6',
+            default => '[:where(&)]:size-6',
         },
     );
 
@@ -22,6 +25,9 @@
         'outline' => 2,
         'mini' => 2.25,
         'micro' => 2.5,
+        'destructive' => 2,
+        'danger' => 2,
+        default => 2,
     };
 @endphp
 

@@ -18,7 +18,7 @@ new #[Title('Play Table')] class extends Component {
     public string $type = '';
 
     #[Validate('required|string|max:255')]
-    public string $colors = '';
+    public string $color = '';
 
     #[Validate('required|integer|min:0')]
     public int $power = 1;
@@ -88,7 +88,7 @@ new #[Title('Play Table')] class extends Component {
     {
         $preset = TokenPreset::findOrFail($id);
 
-        $this->pushCard($preset->name, $preset->type, $preset->power, $preset->toughness, $preset->description, $preset->colors);
+        $this->pushCard($preset->name, $preset->type, $preset->power, $preset->toughness, $preset->description, $preset->color);
     }
 
     /**
@@ -98,9 +98,9 @@ new #[Title('Play Table')] class extends Component {
     {
         $this->validate();
 
-        $this->pushCard($this->name, $this->type, $this->power, $this->toughness, $this->description, $this->colors);
+        $this->pushCard($this->name, $this->type, $this->power, $this->toughness, $this->description, $this->color);
 
-        $this->reset(['name', 'type', 'power', 'toughness', 'description', 'colors']);
+        $this->reset(['name', 'type', 'power', 'toughness', 'description', 'color']);
     }
 
     /**
@@ -231,7 +231,7 @@ new #[Title('Play Table')] class extends Component {
         $this->showPresets = !$this->showPresets;
     }
 
-    private function pushCard(string $name, string $type, int $power, int $toughness, ?string $description, string $colors): void
+    private function pushCard(string $name, string $type, int $power, int $toughness, ?string $description, string $color): void
     {
         $this->cards[] = [
             'id' => (string) Str::uuid(),
@@ -240,7 +240,7 @@ new #[Title('Play Table')] class extends Component {
             'power' => $power,
             'toughness' => $toughness,
             'description' => $description,
-            'colors' => $colors,
+            'color' => $color,
             'power_counters' => 0,
             'toughness_counters' => 0,
             'counters_linked' => true,
@@ -333,7 +333,7 @@ new #[Title('Play Table')] class extends Component {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 sm:items-end gap-3 text-center mb-2">
                         <flux:input wire:model="name" :label="__('Name')" size="sm" input:class="text-center" />
-                        <flux:input wire:model="colors" :label="__('Colors')" size="sm"
+                        <flux:input wire:model="color" :label="__('color')" size="sm"
                             input:class="text-center" />
                         <flux:input wire:model="type" :label="__('Type')" size="sm" input:class="text-center" />
                     </div>

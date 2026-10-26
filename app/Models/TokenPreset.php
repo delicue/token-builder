@@ -12,20 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $power
  * @property int $toughness
  * @property string $description
- * @property array $colors
+ * @property string $color
  */
-#[Fillable(['name', 'type', 'power', 'toughness', 'description', 'colors'])]
+#[Fillable(['name', 'type', 'power', 'toughness', 'description', 'color'])]
 class TokenPreset extends Model
 {
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'colors' => 'array',
-        ];
-    }
 }

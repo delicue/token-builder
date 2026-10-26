@@ -4,7 +4,7 @@ const pageDraftFields = {
 		'cards',
 		'name',
 		'type',
-		'colors',
+		'color',
 		'power',
 		'toughness',
 		'description',
@@ -51,7 +51,7 @@ function initializeDashboardDrafts() {
 			return Array.isArray(value) && value.length <= 64 && value.every(Number.isInteger);
 		}
 
-		if (field === 'colors') {
+		if (field === 'color') {
 			return Array.isArray(value) && value.length <= 10 && value.every((color) => typeof color === 'string');
 		}
 

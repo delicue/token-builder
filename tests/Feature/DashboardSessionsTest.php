@@ -14,7 +14,7 @@ function dashboardSessionCard(): array
         'power' => 2,
         'toughness' => 3,
         'description' => '',
-        'colors' => [],
+        'color' => '',
         'power_counters' => 0,
         'toughness_counters' => 0,
         'counters_linked' => true,

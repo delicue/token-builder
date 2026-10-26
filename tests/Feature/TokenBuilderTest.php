@@ -7,8 +7,8 @@ use App\Models\User;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    $this->soldier = TokenPreset::create(['name' => 'Soldier', 'type' => 'Creature — Soldier', 'power' => 1, 'toughness' => 1, 'colors' => []]);
-    $this->zombie = TokenPreset::create(['name' => 'Zombie', 'type' => 'Creature — Zombie', 'power' => 2, 'toughness' => 2, 'colors' => []]);
+    $this->soldier = TokenPreset::create(['name' => 'Soldier', 'type' => 'Creature — Soldier', 'power' => 1, 'toughness' => 1, 'color' => '']);
+    $this->zombie = TokenPreset::create(['name' => 'Zombie', 'type' => 'Creature — Zombie', 'power' => 2, 'toughness' => 2, 'color' => '']);
 });
 
 test('preset tokens can be added to the canvas', function () {
@@ -35,7 +35,7 @@ test('a custom card can be added from the form', function () {
     $component = Livewire::test('pages::dashboard.play-table')
         ->set('name', 'Dragon')
         ->set('type', 'Creature — Dragon')
-        ->set('colors', ['red'])
+        ->set('color', 'red')
         ->set('power', 5)
         ->set('toughness', 5)
         ->call('addCustom');
@@ -152,8 +152,8 @@ test('each card has its own description modal', function () {
 
     $component = Livewire::test('pages::dashboard.play-table')
         ->set('cards', [
-            ['id' => 'first-card', 'name' => 'Soldier', 'type' => 'Creature', 'power' => 1, 'toughness' => 1, 'description' => 'First description', 'colors' => '', 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false],
-            ['id' => 'second-card', 'name' => 'Zombie', 'type' => 'Creature', 'power' => 2, 'toughness' => 2, 'description' => 'Second description', 'colors' => '', 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false],
+            ['id' => 'first-card', 'name' => 'Soldier', 'type' => 'Creature', 'power' => 1, 'toughness' => 1, 'description' => 'First description', 'color' => '', 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false],
+            ['id' => 'second-card', 'name' => 'Zombie', 'type' => 'Creature', 'power' => 2, 'toughness' => 2, 'description' => 'Second description', 'color' => '', 'power_counters' => 0, 'toughness_counters' => 0, 'counters_linked' => true, 'tapped' => false],
         ]);
 
     $html = $component->html();

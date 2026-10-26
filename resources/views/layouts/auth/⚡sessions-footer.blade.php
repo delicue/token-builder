@@ -52,7 +52,7 @@ new class extends Component
             'cards.*.power' => ['required', 'integer', 'between:0,1000000'],
             'cards.*.toughness' => ['required', 'integer', 'between:0,1000000'],
             'cards.*.description' => ['nullable', 'string', 'max:255'],
-            'cards.*.colors' => ['nullable', 'array'],
+            'cards.*.color' => ['nullable', 'string'],
             'cards.*.power_counters' => ['nullable', 'integer', 'between:-1000000,1000000'],
             'cards.*.toughness_counters' => ['nullable', 'integer', 'between:-1000000,1000000'],
             'cards.*.counters_linked' => ['nullable', 'boolean'],
